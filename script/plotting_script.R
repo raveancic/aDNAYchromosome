@@ -9,7 +9,7 @@ source("script/function.R")
 
 #The input file for the sample you want to test has to be tfile plink format tped ecc ecc.
 
-files_tped <- list.files("data/Panama_chrY.aDNA/",pattern = "*aDNA*.tped")
+files_tped <- list.files("data/Panama_chrY.aDNA/",pattern = "*Y.30.tped")
 tped.panama.ancient <- read.table(paste0("data/Panama_chrY.aDNA/", files_tped), header = F, na.strings = "N")
 
 tfam.ancient <- read.table(paste0("data/Panama_chrY.aDNA/", gsub("tped", "tfam", files_tped)), header = F, na.strings = "N")
@@ -40,7 +40,7 @@ for(i in 1:length(tabs)){
   
   plots[[i]] <- ggplot(data=as.data.frame(tabggplot), aes(x=Hg, y=SNP,fill=Damage)) +
     geom_bar(stat="identity") + 
-    scale_fill_manual(values = col_bp) +
+    scale_fill_manual(values = col_bp, labels=c("anc.", "anc. damage", "der.","der. damage")) +
     labs(title= names(tabs[i]),
          x= "Y haplogroups (as in Poznick et al., 2016)",
          y= "number of SNPs") +
@@ -57,10 +57,8 @@ for(i in 1:length(tabs)){
 
 p2save <- plot_grid(plotlist = plots)  
 
-ggsave("figures/samplesplot.png", p2save, width = 21, height = 7)
-ggsave("figures/samplesplot.pdf", p2save, width = 21, height = 7)
-
-
+ggsave("figures/samplesplot.png", p2save, width = 21, height = 10)
+ggsave("figures/samplesplot.pdf", p2save, width = 21, height = 10)
 
 
 ##### FOR SPECIFIC HAPLOGROUP##################
