@@ -1,4 +1,4 @@
-#### Prediction of the main Ychr haplogroup in aDNA samples######
+#### Prediction of the main Ychr haplogroup in aDNA samples
 library(ggplot2)
 library(dplyr)
 library(cowplot)
@@ -15,8 +15,6 @@ tped.panama.ancient <- read.table(paste0("data/Panama_chrY.aDNA/", files_tped), 
 # tfam.ancient <- read.table(paste0("data/Panama_chrY.aDNA/", gsub("tped", "tfam", files_tped)), header = F, na.strings = "N")
 tfam.ancient <- read.table("data/Panama_chrY.aDNA/new_namesaDNA.txt", header = F, na.strings = "N")
 
-
-
 # Take the file lists with snps
 # This is the list taken by Poznick et al., 2016
 pos <- read.table("data/all.haplogroups.snps.txt")
@@ -32,7 +30,6 @@ pos_spec_mod <- data.frame("Hg"= pos_spec$NOMI.GRUPPI,
                            "Der"= pos_spec$DER,
                            "acc"= ".")
 
-
 # # This is the list taken by Pinotti et al., 2018
 # pos_spec_Pinotti_M242 <- read.table("data/1-s2.0-S0960982218314957-mmc3.csv", header = T, sep = ",")
 # # Little modification as table before to make it attractive for the function
@@ -43,7 +40,6 @@ pos_spec_mod <- data.frame("Hg"= pos_spec$NOMI.GRUPPI,
 #                            "Anc"= pos_spec_Pinotti_M242$reference,
 #                            "Der"= pos_spec_Pinotti_M242$alternate,
 #                            "acc"= gsub(".x.", "x" ,gsub("", ".", gsub("\\*", "x", pos_spec_Pinotti_M242$X.note.2.))))
-
 
 # Run the function on all the tped samples
 
@@ -86,12 +82,10 @@ for(i in 1:length(tabs)){
   
 }
 
-
-p2save <- plot_grid(plotlist = plots)  
+p2save_gen <- plot_grid(plotlist = plots)  
 
 ggsave("figures/samplesplot_gen.png", p2save, width = 21, height = 10)
 ggsave("figures/samplesplot_gen.pdf", p2save, width = 21, height = 10)
-ggsave("~/Desktop/samplesplot_gen.pdf", p2save, width = 21, height = 10)
 
 # For specific Hg Tomorrow with our position.
   
@@ -129,24 +123,8 @@ for(i in 1:length(tab_Q)){
   
 }
 
-
 p2save <- plot_grid(plotlist = plots)  
 
 ggsave("figures/samplesplot_Specific.png", p2save, width = 21, height = 10)
 ggsave("figures/samplesplot_Specific.pdf", p2save, width = 21, height = 10)
 ggsave("~/Desktop/samplesplot_Grugni2019.pdf", p2save, width = 21, height = 10)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
