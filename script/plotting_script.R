@@ -87,11 +87,11 @@ for(i in 1:length(tabs)){
 }
 
 
-p2save <- plot_grid(plotlist = plots)  
+p2save_gen <- plot_grid(plotlist = plots)  
 
 ggsave("figures/samplesplot_gen.png", p2save, width = 21, height = 10)
 ggsave("figures/samplesplot_gen.pdf", p2save, width = 21, height = 10)
-ggsave("~/Desktop/samplesplot_gen.pdf", p2save, width = 21, height = 10)
+# ggsave("~/Desktop/samplesplot_gen.pdf", p2save, width = 21, height = 10)
 
 # For specific Hg Tomorrow with our position.
   
