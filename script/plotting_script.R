@@ -9,6 +9,9 @@ source("script/function.R")
 
 #The input file for the sample you want to test has to be tfile plink format tped ecc ecc.
 
+# This input file is in the folder data/Panama_chrY.aDNA/Panama_chrY.aDNA.tar.gz
+system("tar -xvf data/Panama_chrY.aDNA/Panama_chrY.aDNA.tar.gz")
+
 files_tped <- list.files("data/Panama_chrY.aDNA/",pattern = "*aDNA.tped")
 tped.panama.ancient <- read.table(paste0("data/Panama_chrY.aDNA/", files_tped), header = F, na.strings = "N")
 
