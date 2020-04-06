@@ -4,10 +4,14 @@ library(dplyr)
 
 CrTab_DamageHg <- function(tpedtab, posfile){
   
+  # tpedtab= cbind(tped.panama.ancient[,1:4],tped.panama.ancient[,11:12])
+  
+  # posfile= pos
+  
   # It match the position in hg37 with the tped
   concat1 <- tpedtab[na.omit(match(posfile[,3], tpedtab[,4])),c(4,5)]
   # It matches back to the previous file for the Hg
-  concat2  <- posfile[match(concat1$V4, posfile$V3),]
+  concat2  <- posfile[match(concat1$V4, posfile[,3]),]
   # It generates the table for the prediction
   concat <- cbind(concat1, concat2)
   #Give the colname
@@ -31,9 +35,12 @@ CrTab_DamageHg <- function(tpedtab, posfile){
     concat$HgNo[r] <- ifelse(as.character(concat$sample[r])==as.character(concat$anc[r]), "anc", "")
     
     # Look at the damage C-->T
-    concat$Damage[r] <- ifelse(as.character(concat$anc[r])=="C" & as.character(concat$der[r])=="T", "dam", "")
+    concat$Damage[r] <- ifelse((as.character(concat$anc[r])=="C" | as.character(concat$anc[r])=="C") & (as.character(concat$der[r])=="T" | as.character(concat$der[r])=="C"), "dam", "")
+    
     # Look at the damage G -->A
-    concat$Damage[r] <- ifelse(as.character(concat$anc[r])=="G" & as.character(concat$der[r])=="A", "dam", "") }
+    concat$Damage[r] <- ifelse((as.character(concat$anc[r])=="A" | as.character(concat$anc[r]) =="G") & (as.character(concat$der[r])=="G" | as.character(concat$der[r])=="A"), "dam", "")
+    
+    }
   
   # Two data set divided by hg YES and hg NO
   concat_4plotHgYes.tmp1 <-   concat %>% group_by(Hg, HgYes, Damage) %>% 
@@ -58,8 +65,11 @@ CrTab_DamageHg <- function(tpedtab, posfile){
   
 }
 
+### For Specific ###
 
-tpedapply <- function(tpedtab, p, namesamples){
+# Apply them
+
+tpedapply <- function(tpedtab,funz, p, namesamples){
   
   # tpedtab= tped.panama.ancient
   
@@ -73,7 +83,7 @@ tpedapply <- function(tpedtab, p, namesamples){
       
       tab = cbind(tpedtab[1:4],tpedtab[clm2take[i]-1:clm2take[i]])
       
-      myl[[i]] <- CrTab_DamageHg(tab, pos)
+      myl[[i]] <- funz(tab, p)
     
   }
   
