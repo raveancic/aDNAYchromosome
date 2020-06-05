@@ -32,26 +32,28 @@ CrTab_DamageHg <- function(tpedtab, posfile){
   #
   for(r in 1:nrow(concat)){
     
+    # r=8
+    
     # See if we have the hg
     concat$HgYes[r] <- ifelse(as.character(concat$sample[r])==as.character(concat$der[r]), "der", "")
     concat$HgNo[r] <- ifelse(as.character(concat$sample[r])==as.character(concat$anc[r]), "anc", "")
     
     # Look at the damage C-->T
-    concat$Damage[r] <- ifelse((as.character(concat$anc[r])=="C" | as.character(concat$anc[r])=="C") & (as.character(concat$der[r])=="T" | as.character(concat$der[r])=="C"), "dam", "")
+    concat$Damage[r] <- ifelse(((as.character(concat$anc[r])=="C" | as.character(concat$anc[r])=="T") & (as.character(concat$der[r])=="T" | as.character(concat$der[r])=="C")) | ((as.character(concat$anc[r])=="A" | as.character(concat$anc[r]) =="G") & (as.character(concat$der[r])=="G" | as.character(concat$der[r])=="A")), "dam", "")
     
     # Look at the damage G -->A
-    concat$Damage[r] <- ifelse((as.character(concat$anc[r])=="A" | as.character(concat$anc[r]) =="G") & (as.character(concat$der[r])=="G" | as.character(concat$der[r])=="A"), "dam", "")
+    # concat$Damage[r] <- ifelse((as.character(concat$anc[r])=="A" | as.character(concat$anc[r]) =="G") & (as.character(concat$der[r])=="G" | as.character(concat$der[r])=="A"), "dam", "")
     
     }
   
   # Two data set divided by hg YES and hg NO
   concat_4plotHgYes.tmp1 <-   concat %>% group_by(Hg, HgYes, Damage) %>% 
     summarise(n = n())
-  concat_4plotHgYes <- concat_4plotHgYes.tmp1[concat_4plotHgYes.tmp1$HgYes=="der",]
+  concat_4plotHgYes <- concat_4plotHgYes.tmp1[which(concat_4plotHgYes.tmp1$HgYes=="der"),]
   
   concat_4plotHgNo.temp1 <-   concat %>% group_by(Hg, HgNo, Damage) %>% 
     summarise(n = n())
-  concat_4plotHgNo <- concat_4plotHgNo.temp1[concat_4plotHgNo.temp1$HgNo=="anc",]
+  concat_4plotHgNo <- concat_4plotHgNo.temp1[which(concat_4plotHgNo.temp1$HgNo=="anc"),]
   
   # Prepare the 
   concat_4plotHgYes$Damage[concat_4plotHgYes$Damage=="dam"] <- c("der_dam")
@@ -84,7 +86,7 @@ tpedapply <- function(tpedtab,funz, p, namesamples){
   myl <- list()
   
   for(i in 1:length(clm2take)){
-    # i=1
+    # i=3
       
     
     
@@ -97,12 +99,4 @@ tpedapply <- function(tpedtab,funz, p, namesamples){
   names(myl) <- namesamples
   return(myl)
 }
-
-
-
-
-
-
-
-
 

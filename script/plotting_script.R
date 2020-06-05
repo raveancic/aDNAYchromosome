@@ -4,7 +4,7 @@ library(dplyr)
 library(cowplot)
 library(jcolors)
 library(scales)
-
+library(openxlsx)
 
 source("script/function.R")
 
@@ -76,6 +76,7 @@ tab <- list()
 
 tabs <- tpedapply(tped.panama.ancient, CrTab_DamageHg, pos, as.character(tfam.ancient_2test$V4))
 
+write.xlsx(tabs, "tab_Hg_Gen.xlsx")
 
 plots <- list()
 
@@ -108,8 +109,8 @@ n = length(plots)/2
 
 p2save_gen <- plot_grid(plotlist = plots, nrow = n, labels = "AUTO")  
 
-ggsave("figures/samplesplot_genv2.png", p2save_gen, width = 15, height = 13)
-ggsave("figures/samplesplot_genv2.pdf", p2save_gen, width = 15, height = 13)
+ggsave("figures/samplesplot_genv3.png", p2save_gen, width = 15, height = 13)
+ggsave("figures/samplesplot_genv3.pdf", p2save_gen, width = 15, height = 13)
 # ggsave("~/Desktop/samplesplot_gen.pdf", p2save, width = 21, height = 10)
 
 # For specific Hg Tomorrow with our position.
@@ -118,13 +119,15 @@ ggsave("figures/samplesplot_genv2.pdf", p2save_gen, width = 15, height = 13)
 
 tabs_spec <- list()
 
-tabs_spec <- tpedapply(tped.panama.ancient, CrTab_DamageHg, pos_spec_mod, as.character(tfam.ancient$V4))
+tabs_spec <- tpedapply(tped.panama.ancient, CrTab_DamageHg, pos_spec_mod, as.character(tfam.ancient_2test$V4))
 
 tab_Q <- list()
 
-tab_Q <- tabs_spec[unlist(lapply(tabs_spec, function(x) any(x[,2]=="der")))]
+tab_Q <- tabs_spec[unlist(lapply(tabs_spec, function(x) any(x[,2]=="der_dam")))]
 
 plots <- list()
+
+write.xlsx(tabs_spec, "tab_Hg_specific.xlsx")
 
 for(i in 1:length(tab_Q)){
   
@@ -154,6 +157,6 @@ for(i in 1:length(tab_Q)){
 
 p2save_spec <- plot_grid(plotlist = plots, nrow = 2, labels= "AUTO")  
 
-ggsave("figures/samplesplot_Specificv2.png", p2save_spec, width = 15, height = 8)
-ggsave("figures/samplesplot_Specificv2.pdf", p2save_spec, width = 15, height = 8)
+ggsave("figures/samplesplot_Specificv3.png", p2save_spec, width = 15, height = 8)
+ggsave("figures/samplesplot_Specificv3.pdf", p2save_spec, width = 15, height = 8)
 ggsave("~/Desktop/samplesplot_Grugni2019.pdf", p2save, width = 21, height = 10)
