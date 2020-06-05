@@ -6,12 +6,14 @@ CrTab_DamageHg <- function(tpedtab, posfile){
   
   # tpedtab= cbind(tped.panama.ancient[,1:4],tped.panama.ancient[,11:12])
   
+  
+  # tpedtab= tab
   # posfile= pos
   
   # It match the position in hg37 with the tped
   concat1 <- tpedtab[na.omit(match(posfile[,3], tpedtab[,4])),c(4,5)]
   # It matches back to the previous file for the Hg
-  concat2  <- posfile[match(concat1$V4, posfile[,3]),]
+  concat2  <- posfile[match(concat1$pos, posfile[,3]),]
   # It generates the table for the prediction
   concat <- cbind(concat1, concat2)
   #Give the colname
@@ -72,16 +74,21 @@ CrTab_DamageHg <- function(tpedtab, posfile){
 tpedapply <- function(tpedtab,funz, p, namesamples){
   
   # tpedtab= tped.panama.ancient
+  # namesamples=as.character(tfam.ancient_2test$V4)
+
+  # strcln = 6:ncol(tpedtab)
+  # clm2take = strcln[strcln %% 2 == 0]
+  clm2take =match(namesamples,gsub("_B", "",gsub("_A", "",colnames(tpedtab))))
   
-  strcln = 6:ncol(tped.panama.ancient)
-  
-  clm2take = strcln[strcln %% 2 == 0]
   
   myl <- list()
   
   for(i in 1:length(clm2take)){
+    # i=1
       
-      tab = cbind(tpedtab[1:4],tpedtab[clm2take[i]-1:clm2take[i]])
+    
+    
+      tab = cbind(tpedtab[1:4],tpedtab[clm2take[i]:(clm2take[i]+1)])
       
       myl[[i]] <- funz(tab, p)
     

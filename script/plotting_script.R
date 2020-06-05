@@ -5,6 +5,7 @@ library(cowplot)
 library(jcolors)
 library(scales)
 
+
 source("script/function.R")
 
 #The input file for the sample you want to test has to be tfile plink format tped ecc ecc.
@@ -17,6 +18,21 @@ tped.panama.ancient <- read.table(paste0("data/Panama_chrY.aDNA/", files_tped), 
 
 # tfam.ancient <- read.table(paste0("data/Panama_chrY.aDNA/", gsub("tped", "tfam", files_tped)), header = F, na.strings = "N")
 tfam.ancient <- read.table("data/Panama_chrY.aDNA/new_namesaDNA.txt", header = F, na.strings = "N")
+
+tfam.ancient$sex <- rep("M", nrow(tfam.ancient))
+tfam.ancient$sex[tfam.ancient$V4 == "PAPV172"] <- "F"
+
+# Give names to the tped columns
+
+colnames_tped <- paste(as.character(unlist(lapply(tfam.ancient$V4, function(x) rep(x,2)))), 
+      rep(c("A","B"), times=length(tfam.ancient$V1)), sep = "_")
+
+colnames(tped.panama.ancient) <- c("CHR", "rs", "CM", "pos", colnames_tped)
+ 
+
+# select only the M
+tfam.ancient_2test <- tfam.ancient[tfam.ancient$sex=="M",]
+
 
 # Take the file lists with snps
 # This is the list taken by Poznick et al., 2016
@@ -56,7 +72,9 @@ names(lab) <- c("anc", "anc_dam", "der", "der_dam")
 
 # Run the function
 
-tabs <- tpedapply(tped.panama.ancient, CrTab_DamageHg, pos, as.character(tfam.ancient$V4))
+tab <- list()
+
+tabs <- tpedapply(tped.panama.ancient, CrTab_DamageHg, pos, as.character(tfam.ancient_2test$V4))
 
 
 plots <- list()
@@ -85,26 +103,26 @@ for(i in 1:length(tabs)){
   
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 2d07c55f3c615dcc93b6fd6ee012b9ac4495b7b2
-p2save_gen <- plot_grid(plotlist = plots)  
+n = length(plots)/2
 
-ggsave("figures/samplesplot_gen.png", p2save, width = 21, height = 10)
-ggsave("figures/samplesplot_gen.pdf", p2save, width = 21, height = 10)
-<<<<<<< HEAD
-=======
+p2save_gen <- plot_grid(plotlist = plots, nrow = n, labels = "AUTO")  
+
+ggsave("figures/samplesplot_genv2.png", p2save_gen, width = 15, height = 13)
+ggsave("figures/samplesplot_genv2.pdf", p2save_gen, width = 15, height = 13)
 # ggsave("~/Desktop/samplesplot_gen.pdf", p2save, width = 21, height = 10)
->>>>>>> 2d07c55f3c615dcc93b6fd6ee012b9ac4495b7b2
 
 # For specific Hg Tomorrow with our position.
   
 # Run the function on all the tped samples
 
-tabs <- tpedapply(tped.panama.ancient, CrTab_DamageHg, pos_spec_mod, as.character(tfam.ancient$V4))
+tabs_spec <- list()
 
-tab_Q <- tabs[unlist(lapply(tabs, function(x) any(x[,2]=="der")))]
+tabs_spec <- tpedapply(tped.panama.ancient, CrTab_DamageHg, pos_spec_mod, as.character(tfam.ancient$V4))
+
+tab_Q <- list()
+
+tab_Q <- tabs_spec[unlist(lapply(tabs_spec, function(x) any(x[,2]=="der")))]
 
 plots <- list()
 
@@ -121,7 +139,7 @@ for(i in 1:length(tab_Q)){
     scale_fill_manual(values = col_bp, 
                       labels= lab
                       ) +
-    labs(title= names(tabs[i]),
+    labs(title= names(tab_Q[i]),
          x= "Spec Y haplogroups (as in Grugni et al., 2019)",
          y= "number of SNPs") +
     theme(
@@ -134,8 +152,8 @@ for(i in 1:length(tab_Q)){
   
 }
 
-p2save <- plot_grid(plotlist = plots)  
+p2save_spec <- plot_grid(plotlist = plots, nrow = 2, labels= "AUTO")  
 
-ggsave("figures/samplesplot_Specific.png", p2save, width = 21, height = 10)
-ggsave("figures/samplesplot_Specific.pdf", p2save, width = 21, height = 10)
+ggsave("figures/samplesplot_Specificv2.png", p2save_spec, width = 15, height = 8)
+ggsave("figures/samplesplot_Specificv2.pdf", p2save_spec, width = 15, height = 8)
 ggsave("~/Desktop/samplesplot_Grugni2019.pdf", p2save, width = 21, height = 10)
